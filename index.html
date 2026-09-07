@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fahrzeugliste – Rechner & Verwaltung</title>
+<meta name="description" content="Fahrzeugwerte, Tuning, Pro-Teile, Driftkit und Verkaufswerte übersichtlich berechnen und lokal verwalten.">
+<meta name="theme-color" content="#111827">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚗</text></svg>">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:30px;font-family:Arial,sans-serif;background:#111827;color:#f9fafb}
+.container{max-width:1450px;margin:auto}
+h1{margin-bottom:5px}.subtitle{color:#9ca3af;margin-bottom:30px}
+.card{background:#1f2937;border:1px solid #374151;border-radius:12px;padding:25px;margin-bottom:25px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.field{display:flex;flex-direction:column;gap:7px}
+label{font-weight:bold;color:#d1d5db}
+input,select{width:100%;padding:12px;border-radius:7px;border:1px solid #4b5563;background:#111827;color:white;font-size:15px}
+input[readonly]{background:#374151;font-weight:bold}
+.tuning-row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:15px;align-items:end;margin-bottom:18px}
+.category-name{font-size:18px;font-weight:bold;padding-bottom:12px}
+.result-box{margin-top:25px;padding:20px;background:#111827;border-radius:10px;border:1px solid #374151}
+.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.final{font-size:24px;font-weight:bold;color:#34d399}
+button{border:0;padding:13px 20px;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer}
+.btn-add{background:#2563eb;color:white;margin-top:20px;margin-right:10px}
+.btn-secondary{background:#4b5563;color:white;margin-top:20px;margin-right:10px}
+.btn-edit{background:#d97706;color:white;padding:7px 12px;margin-right:6px}
+.btn-delete{background:#dc2626;color:white;padding:7px 12px}
+.btn-export{background:#059669;color:white;margin-right:10px}
+.btn-import{background:#7c3aed;color:white}
+table{width:100%;border-collapse:collapse;margin-top:15px;font-size:14px}
+th,td{padding:10px;border-bottom:1px solid #374151;text-align:left;vertical-align:top}
+th{color:#9ca3af}.money{white-space:nowrap}
+.notice{color:#93c5fd;font-size:14px;margin-top:10px}
+.actions{display:flex;flex-wrap:wrap;gap:6px}
+@media(max-width:1000px){
+.grid,.result-grid{grid-template-columns:1fr 1fr}
+.tuning-row{grid-template-columns:1fr 1fr}
+body{padding:15px}.table-container{overflow-x:auto}
+}
+@media(max-width:650px){
+.grid,.result-grid,.tuning-row{grid-template-columns:1fr}
+}
+</style>
+
+<style id="compact-overrides">
+/* Kompaktere, übersichtlichere Darstellung */
+body{padding:16px;font-size:14px}
+.container{max-width:1280px}
+h1{font-size:25px;margin:0 0 2px}.subtitle{margin-bottom:14px;font-size:13px}
+h2{font-size:18px;margin:0 0 12px}
+.card{padding:15px;margin-bottom:14px;border-radius:9px}
+.grid{gap:10px}
+.field{gap:4px}
+label{font-size:12px}
+input,select{padding:8px 9px;border-radius:6px;font-size:13px;min-height:35px}
+.result-box{margin-top:12px;padding:11px;border-radius:7px}
+.result-grid{gap:9px}
+.final{font-size:18px}
+.tuning-row{grid-template-columns:150px 1fr 1fr 1fr;gap:9px;margin-bottom:9px;align-items:end}
+.category-name{font-size:14px;padding-bottom:9px}
+.notice{font-size:12px;margin-top:7px;line-height:1.35}
+button{padding:9px 13px;border-radius:6px;font-size:13px}
+.btn-add,.btn-secondary{margin-top:12px;margin-right:6px}
+.btn-edit,.btn-delete{padding:5px 8px;font-size:12px}
+table{margin-top:8px;font-size:12px}
+th,td{padding:7px 8px;line-height:1.35}
+.actions{gap:4px;flex-wrap:nowrap}
+/* Preisverwaltung weniger dominant */
+.card:nth-of-type(3) table input{padding:6px;min-height:31px}
+/* Gespeicherte Fahrzeuge: Kennzahlen und Suche kompakt */
+#fahrzeugSuche{max-width:420px}
+@media(max-width:1000px){body{padding:10px}.tuning-row{grid-template-columns:120px 1fr 1fr}.tuning-row>div:last-child{grid-column:2/4}.card{padding:12px}}
+@media(max-width:650px){.tuning-row{grid-template-columns:1fr}.tuning-row>div:last-child{grid-column:auto}.card{padding:11px}h1{font-size:22px}}
+</style>
+
+<style id="public-site-overrides">
+:root{--bg:#0b1220;--panel:#162033;--panel2:#0f1727;--line:#2b3a52;--muted:#95a3b8;--accent:#38bdf8;--good:#34d399}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(circle at top,#17233a 0,#0b1220 38%,#090f1b 100%);min-height:100vh}
+.site-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 14px;padding:10px 2px 12px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:#1d4ed8;font-size:21px;box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.brand-copy h1{font-size:22px;margin:0}.brand-copy .subtitle{margin:2px 0 0;font-size:12px}
+.header-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.badge{padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:rgba(15,23,39,.78);color:#cbd5e1;font-size:11px;white-space:nowrap}
+.card{box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.card h2{display:flex;align-items:center;gap:8px}.card h2:before{content:"";width:4px;height:17px;border-radius:5px;background:var(--accent)}
+input:focus,select:focus{outline:2px solid rgba(56,189,248,.35);border-color:#38bdf8}
+button{transition:transform .12s ease,filter .12s ease}button:hover{filter:brightness(1.08)}button:active{transform:translateY(1px)}
+.public-note{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;margin:0 0 14px;border:1px solid #264565;border-radius:8px;background:rgba(14,57,91,.28);color:#bfdbfe;font-size:12px;line-height:1.4}
+.site-footer{padding:8px 2px 22px;color:#718096;font-size:11px;text-align:center}
+@media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column}.header-badges{justify-content:flex-start}.brand-copy h1{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-icon" aria-hidden="true">🚗</div>
+    <div class="brand-copy">
+      <h1>Fahrzeugliste</h1>
+      <div class="subtitle">Rechner & lokale Fahrzeugverwaltung</div>
+    </div>
+  </div>
+  <div class="header-badges" aria-label="Eigenschaften">
+    <span class="badge">⚡ Sofortberechnung</span>
+    <span class="badge">💾 Lokale Speicherung</span>
+    <span class="badge">📱 Mobil nutzbar</span>
+  </div>
+</header>
+<div class="public-note"><span>ℹ️</span><span><strong>Datenschutzfreundlich:</strong> Fahrzeugdaten und Preisänderungen bleiben in diesem Browser gespeichert. Es werden durch diese Seite keine Daten an einen Server übertragen.</span></div>
+
+<div class="card">
+<h2>Fahrzeugdaten</h2>
+<div class="grid">
+<div class="field"><label>Fahrzeugname</label><input id="fahrzeugname" placeholder="z. B. Sultan RS"></div>
+<div class="field"><label>Kennzeichen</label><input id="kennzeichen" placeholder="z. B. LS 1234"></div>
+<div class="field"><label>Staatswert ($)</label><input type="number" id="staatswert" min="0" step="0.01" placeholder="z. B. 100000"></div>
+<div class="field"><label>Garage</label>
+<select id="garage">
+<option value="Famgarage">Famgarage</option>
+<option value="Apartment">Apartment</option>
+<option value="Nicht ausgeparkt">Nicht ausgeparkt</option>
+</select>
+</div>
+</div>
+
+<div class="result-box">
+<div class="result-grid">
+<div class="field"><label>10 % vom Staatswert (nur Anzeige)</label><input id="staatswertAbzug" readonly></div>
+<div class="field"><label>Staatswert (Berechnungsgrundlage)</label><input id="hauptsumme" readonly></div>
+<div class="field"><label>Gesamte Pro-Teile</label><input id="proTeileGesamtFeld" readonly></div>
+<div class="field"><label>Driftkit-Zuschlag</label><input id="driftkitZuschlagFeld" readonly></div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Tuning-Zuschläge vom Staatswert</h2><div class="notice" style="margin-bottom:18px">Höhere Tuning-Stufen werden kumulativ berechnet. Beispiel: Motor Stufe 4 = 10 % + 20 % + 30 % + 40 % = 100 % vom Staatswert.</div>
+
+<div class="tuning-row">
+<div class="category-name">Motor</div>
+<div class="field"><label>Stufe</label><select id="motor"><option value="0">Keine</option><option value="10">Stufe 1 - 10 %</option><option value="20">Stufe 2 - 20 %</option><option value="30">Stufe 3 - 30 %</option><option value="40">Stufe 4 - 40 %</option></select></div>
+<div class="field"><label>Zuschlag vom Staatswert</label><input id="motorAbzug" readonly></div>
+<div class="field"><label>Summe inkl. Motor-Zuschlag</label><input id="motorSumme" readonly></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Bremse</div>
+<div class="field"><label>Stufe</label><select id="bremse"><option value="0">Keine</option><option value="2.5">Stufe 1 - 2,5 %</option><option value="5">Stufe 2 - 5 %</option><option value="7.5">Stufe 3 - 7,5 %</option></select></div>
+<div class="field"><label>Zuschlag vom Staatswert</label><input id="bremseAbzug" readonly></div>
+<div class="field"><label>Summe inkl. Bremsen-Zuschlag</label><input id="bremseSumme" readonly></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Radaufhängung</div>
+<div class="field"><label>Stufe</label><select id="rad"><option value="0">Keine</option><option value="1.5">Stufe 1 - 1,5 %</option><option value="3">Stufe 2 - 3 %</option><option value="4.5">Stufe 3 - 4,5 %</option><option value="6">Stufe 4 - 6 %</option></select></div>
+<div class="field"><label>Zuschlag vom Staatswert</label><input id="radAbzug" readonly></div>
+<div class="field"><label>Summe inkl. Radaufhängungs-Zuschlag</label><input id="radSumme" readonly></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Getriebe</div>
+<div class="field"><label>Stufe</label><select id="getriebe"><option value="0">Keine</option><option value="2">Stufe 1 - 2 %</option><option value="4">Stufe 2 - 4 %</option><option value="6">Stufe 3 - 6 %</option></select></div>
+<div class="field"><label>Zuschlag vom Staatswert</label><input id="getriebeAbzug" readonly></div>
+<div class="field"><label>Summe inkl. Getriebe-Zuschlag</label><input id="getriebeSumme" readonly></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Preise der Pro-Teile verwalten</h2>
+<div class="notice" style="margin-bottom:18px">
+Hier kannst du die Preise für Light, Medium und Pro jederzeit ändern. Die Änderungen werden im Browser gespeichert und automatisch für alle Fahrzeuge neu berechnet.
+</div>
+<div class="table-container">
+<table>
+<thead><tr><th>Kategorie</th><th>Light ($)</th><th>Medium ($)</th><th>Pro ($)</th></tr></thead>
+<tbody>
+<tr><td>Motor</td><td><input type="number" id="preisMotorLight" min="0" step="1000"></td><td><input type="number" id="preisMotorMedium" min="0" step="1000"></td><td><input type="number" id="preisMotorPro" min="0" step="1000"></td></tr>
+<tr><td>Bremse</td><td><input type="number" id="preisBremseLight" min="0" step="1000"></td><td><input type="number" id="preisBremseMedium" min="0" step="1000"></td><td><input type="number" id="preisBremsePro" min="0" step="1000"></td></tr>
+<tr><td>Radaufhängung</td><td><input type="number" id="preisRadLight" min="0" step="1000"></td><td><input type="number" id="preisRadMedium" min="0" step="1000"></td><td><input type="number" id="preisRadPro" min="0" step="1000"></td></tr>
+<tr><td>Getriebe</td><td><input type="number" id="preisGetriebeLight" min="0" step="1000"></td><td><input type="number" id="preisGetriebeMedium" min="0" step="1000"></td><td><input type="number" id="preisGetriebePro" min="0" step="1000"></td></tr>
+<tr><td>Reifen</td><td><input type="number" id="preisReifenLight" min="0" step="1000"></td><td><input type="number" id="preisReifenMedium" min="0" step="1000"></td><td><input type="number" id="preisReifenPro" min="0" step="1000"></td></tr>
+</tbody>
+</table>
+</div>
+<button class="btn-add" type="button" onclick="proPreiseSpeichern()">Preise speichern & Fahrzeuge neu berechnen</button>
+<button class="btn-secondary" type="button" onclick="standardPreiseLaden()">Standardpreise wiederherstellen</button>
+</div>
+
+<div class="card">
+<h2>Pro-Teile – werden zum Staatswert dazugerechnet</h2>
+
+<div class="tuning-row">
+<div class="category-name">Motor Pro-Teil</div>
+<div class="field"><label>Auswahl</label><select id="proMotor"><option value="0">Keine</option><option value="light">Light</option><option value="medium">Medium</option><option value="pro">Pro</option></select></div>
+<div class="field"><label>Zuschlag</label><input id="proMotorWert" readonly></div>
+<div></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Bremse Pro-Teil</div>
+<div class="field"><label>Auswahl</label><select id="proBremse"><option value="0">Keine</option><option value="light">Light</option><option value="medium">Medium</option><option value="pro">Pro</option></select></div>
+<div class="field"><label>Zuschlag</label><input id="proBremseWert" readonly></div>
+<div></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Radaufhängung Pro-Teil</div>
+<div class="field"><label>Auswahl</label><select id="proRad"><option value="0">Keine</option><option value="light">Light</option><option value="medium">Medium</option><option value="pro">Pro</option></select></div>
+<div class="field"><label>Zuschlag</label><input id="proRadWert" readonly></div>
+<div></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Getriebe Pro-Teil</div>
+<div class="field"><label>Auswahl</label><select id="proGetriebe"><option value="0">Keine</option><option value="light">Light</option><option value="medium">Medium</option><option value="pro">Pro</option></select></div>
+<div class="field"><label>Zuschlag</label><input id="proGetriebeWert" readonly></div>
+<div></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Reifen Pro-Teil</div>
+<div class="field"><label>Auswahl</label><select id="proReifen"><option value="0">Keine</option><option value="light">Light</option><option value="medium">Medium</option><option value="pro">Pro</option></select></div>
+<div class="field"><label>Zuschlag</label><input id="proReifenWert" readonly></div>
+<div></div>
+</div>
+
+<div class="tuning-row">
+<div class="category-name">Driftkit</div>
+<div class="field"><label>Vorhanden?</label><select id="driftkit"><option value="nein">Nein</option><option value="ja">Ja</option></select></div>
+<div class="field"><label>Zuschlag (50 % vom Staatswert)</label><input id="driftkitWert" readonly></div>
+<div></div>
+</div>
+
+<div class="result-box">
+<div class="result-grid">
+<div><label>10 % vom Staatswert (nur Anzeige)</label><div id="grundAbzugAnzeige" class="final">0,00 €</div></div>
+<div><label>Tuning-Zuschläge gesamt</label><div id="gesamtAbzug" class="final">0,00 €</div></div>
+<div><label>Zuschläge gesamt</label><div id="zuschlaegeGesamt" class="final">0,00 €</div></div>
+<div><label>Verkaufswert / Endsumme</label><div id="endsumme" class="final">0,00 €</div></div>
+</div>
+</div>
+
+<button class="btn-add" id="speichernBtn" onclick="fahrzeugSpeichern()">Fahrzeug zur Liste hinzufügen</button>
+<button class="btn-secondary" id="abbrechenBtn" onclick="bearbeitungAbbrechen()" style="display:none">Bearbeiten abbrechen</button>
+</div>
+
+<div class="card">
+<h2>Gespeicherte Fahrzeuge</h2>
+
+<div class="result-box" style="margin-top:0;margin-bottom:20px">
+<div class="result-grid" style="grid-template-columns:repeat(2,1fr)">
+<div>
+<label>Anzahl der Fahrzeuge</label>
+<div id="fahrzeugAnzahl" class="final">0</div>
+</div>
+<div>
+<label>Gesamter Verkaufswert aller Fahrzeuge</label>
+<div id="gesamtVerkaufswert" class="final">0,00 €</div>
+</div>
+</div>
+</div>
+<div class="field" style="margin-bottom:18px;max-width:520px">
+<label>Fahrzeuge suchen</label>
+<input id="fahrzeugSuche" type="text" placeholder="Fahrzeugname, Kennzeichen oder Garage eingeben..." oninput="listeAnzeigen()">
+</div>
+
+<div style="margin-bottom:15px">
+<button class="btn-export" onclick="sicherungExportieren()">💾 Sicherung auf Festplatte speichern</button>
+<button class="btn-import" onclick="document.getElementById('importDatei').click()">📂 Sicherung laden</button>
+<input id="importDatei" type="file" accept=".json,application/json" style="display:none" onchange="sicherungImportieren(event)">
+</div>
+<div class="notice">Die Fahrzeugliste wird automatisch im Browser gespeichert. Mit „Sicherung auf Festplatte speichern“ kannst du zusätzlich eine JSON-Sicherungsdatei herunterladen und später wieder laden.</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Fahrzeug</th><th>Kennzeichen</th><th>Garage</th><th>Staatswert</th>
+<th>Tuning</th><th>Pro-Teile</th><th>Driftkit</th><th>Verkaufswert</th><th>Aktion</th>
+</tr>
+</thead>
+<tbody id="fahrzeugListe"></tbody>
+</table>
+</div>
+</div>
+<footer class="site-footer">Fahrzeugliste · Lokale Web-App ohne Server-Datenbank</footer>
+</div>
+
+<script>
+let bearbeitungsId = null;
+
+const STANDARD_PRO_PREISE = {
+  motor:{light:250000,medium:650000,pro:1000000},
+  bremse:{light:140000,medium:240000,pro:380000},
+  rad:{light:120000,medium:220000,pro:360000},
+  getriebe:{light:110000,medium:210000,pro:350000},
+  reifen:{light:100000,medium:200000,pro:340000}
+};
+
+function holeProPreise(){
+  try{
+    const gespeichert=JSON.parse(localStorage.getItem("proPreise")||"null");
+    return gespeichert || JSON.parse(JSON.stringify(STANDARD_PRO_PREISE));
+  }catch(e){
+    return JSON.parse(JSON.stringify(STANDARD_PRO_PREISE));
+  }
+}
+
+function preisFuer(kategorie,stufe){
+  if(!stufe || stufe==="0") return 0;
+  const p=holeProPreise();
+  return Number(p[kategorie]?.[stufe]||0);
+}
+
+function proPreiseFormularLaden(){
+  const p=holeProPreise();
+  el("preisMotorLight").value=p.motor.light;
+  el("preisMotorMedium").value=p.motor.medium;
+  el("preisMotorPro").value=p.motor.pro;
+  el("preisBremseLight").value=p.bremse.light;
+  el("preisBremseMedium").value=p.bremse.medium;
+  el("preisBremsePro").value=p.bremse.pro;
+  el("preisRadLight").value=p.rad.light;
+  el("preisRadMedium").value=p.rad.medium;
+  el("preisRadPro").value=p.rad.pro;
+  el("preisGetriebeLight").value=p.getriebe.light;
+  el("preisGetriebeMedium").value=p.getriebe.medium;
+  el("preisGetriebePro").value=p.getriebe.pro;
+  el("preisReifenLight").value=p.reifen.light;
+  el("preisReifenMedium").value=p.reifen.medium;
+  el("preisReifenPro").value=p.reifen.pro;
+  aktualisiereProOptionen();
+}
+
+function proPreiseSpeichern(){
+  const p={
+    motor:{light:+el("preisMotorLight").value||0,medium:+el("preisMotorMedium").value||0,pro:+el("preisMotorPro").value||0},
+    bremse:{light:+el("preisBremseLight").value||0,medium:+el("preisBremseMedium").value||0,pro:+el("preisBremsePro").value||0},
+    rad:{light:+el("preisRadLight").value||0,medium:+el("preisRadMedium").value||0,pro:+el("preisRadPro").value||0},
+    getriebe:{light:+el("preisGetriebeLight").value||0,medium:+el("preisGetriebeMedium").value||0,pro:+el("preisGetriebePro").value||0},
+    reifen:{light:+el("preisReifenLight").value||0,medium:+el("preisReifenMedium").value||0,pro:+el("preisReifenPro").value||0}
+  };
+  localStorage.setItem("proPreise",JSON.stringify(p));
+  aktualisiereProOptionen();
+  alleFahrzeugeNeuBerechnen();
+  berechnen();
+  listeAnzeigen();
+  alert("Pro-Teil-Preise wurden gespeichert und alle Fahrzeuge neu berechnet.");
+}
+
+function standardPreiseLaden(){
+  localStorage.setItem("proPreise",JSON.stringify(STANDARD_PRO_PREISE));
+  proPreiseFormularLaden();
+  alleFahrzeugeNeuBerechnen();
+  berechnen();
+  listeAnzeigen();
+}
+
+function aktualisiereProOptionen(){
+  const p=holeProPreise();
+  const daten=[
+    ["proMotor",p.motor],
+    ["proBremse",p.bremse],
+    ["proRad",p.rad],
+    ["proGetriebe",p.getriebe],
+    ["proReifen",p.reifen]
+  ];
+  daten.forEach(([id,preise])=>{
+    const s=el(id);
+    if(!s) return;
+    const current=s.value;
+    s.options[1].text=`Light - ${euro(preise.light)}`;
+    s.options[2].text=`Medium - ${euro(preise.medium)}`;
+    s.options[3].text=`Pro - ${euro(preise.pro)}`;
+    s.value=current;
+  });
+}
+
+const ids = [
+"staatswert","motor","bremse","rad","getriebe","proMotor","proBremse","proRad","proGetriebe","proReifen","driftkit"
+];
+
+function el(id){ return document.getElementById(id); }
+function euro(w){
+  return "$ " + Number(w||0).toLocaleString("de-DE",{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+}
+function esc(t){ const d=document.createElement("div"); d.textContent=t??""; return d.innerHTML; }
+
+function selectText(id){
+  const s=el(id);
+  return s.options[s.selectedIndex].text;
+}
+
+function berechnen(){
+  const wert = Number(el("staatswert").value)||0;
+  const grundAbzug = wert*0.10;
+  const hauptsumme = wert-grundAbzug;
+
+  const motorStufe=+el("motor").value;
+  const bremseStufe=+el("bremse").value;
+  const radStufe=+el("rad").value;
+  const getriebeStufe=+el("getriebe").value;
+
+  // Kumulative Tuning-Prozente:
+  // Bei einer höheren Stufe werden alle vorherigen Stufen mitgerechnet.
+  const motorMap={0:0,10:10,20:30,30:60,40:100};
+  const bremseMap={0:0,2.5:2.5,5:7.5,7.5:15};
+  const radMap={0:0,1.5:1.5,3:4.5,4.5:9,6:15};
+  const getriebeMap={0:0,2:2,4:6,6:12};
+
+  const motorProzent=motorMap[motorStufe] ?? 0;
+  const bremseProzent=bremseMap[bremseStufe] ?? 0;
+  const radProzent=radMap[radStufe] ?? 0;
+  const getriebeProzent=getriebeMap[getriebeStufe] ?? 0;
+
+  const motorAbzug=wert*motorProzent/100;
+  const bremseAbzug=wert*bremseProzent/100;
+  const radAbzug=wert*radProzent/100;
+  const getriebeAbzug=wert*getriebeProzent/100;
+  const tuningAbzug=motorAbzug+bremseAbzug+radAbzug+getriebeAbzug;
+
+  const proMotorStufe=el("proMotor").value;
+  const proBremseStufe=el("proBremse").value;
+  const proRadStufe=el("proRad").value;
+  const proGetriebeStufe=el("proGetriebe").value;
+  const proReifenStufe=el("proReifen").value;
+
+  const proMotor=preisFuer("motor",proMotorStufe);
+  const proBremse=preisFuer("bremse",proBremseStufe);
+  const proRad=preisFuer("rad",proRadStufe);
+  const proGetriebe=preisFuer("getriebe",proGetriebeStufe);
+  const proReifen=preisFuer("reifen",proReifenStufe);
+  const proTeileGesamt=proMotor+proBremse+proRad+proGetriebe+proReifen;
+
+  const driftkitJa=el("driftkit").value==="ja";
+  const driftkitZuschlag=driftkitJa ? wert*0.50 : 0;
+  const zuschlaege=proTeileGesamt+driftkitZuschlag;
+
+  const verkaufswert=wert+tuningAbzug+zuschlaege;
+
+  el("staatswertAbzug").value=euro(grundAbzug);
+  el("hauptsumme").value=euro(wert);
+  el("motorAbzug").value=euro(motorAbzug);
+  el("bremseAbzug").value=euro(bremseAbzug);
+  el("radAbzug").value=euro(radAbzug);
+  el("getriebeAbzug").value=euro(getriebeAbzug);
+  el("motorSumme").value=euro(wert+motorAbzug);
+  el("bremseSumme").value=euro(wert+bremseAbzug);
+  el("radSumme").value=euro(wert+radAbzug);
+  el("getriebeSumme").value=euro(wert+getriebeAbzug);
+
+  el("proMotorWert").value=euro(proMotor);
+  el("proBremseWert").value=euro(proBremse);
+  el("proRadWert").value=euro(proRad);
+  el("proGetriebeWert").value=euro(proGetriebe);
+  el("proReifenWert").value=euro(proReifen);
+  el("proTeileGesamtFeld").value=euro(proTeileGesamt);
+  el("driftkitWert").value=euro(driftkitZuschlag);
+  el("driftkitZuschlagFeld").value=euro(driftkitZuschlag);
+
+  el("grundAbzugAnzeige").innerText=euro(grundAbzug);
+  el("gesamtAbzug").innerText=euro(tuningAbzug);
+  el("zuschlaegeGesamt").innerText=euro(zuschlaege);
+  el("endsumme").innerText=euro(verkaufswert);
+
+  return {
+    wert,grundAbzug,hauptsumme,
+    motorProzent,bremseProzent,radProzent,getriebeProzent,
+    motorStufe,bremseStufe,radStufe,getriebeStufe,
+    motorAbzug,bremseAbzug,radAbzug,getriebeAbzug,tuningAbzug,
+    proMotor,proBremse,proRad,proGetriebe,proReifen,proTeileGesamt,
+    proMotorStufe,proBremseStufe,proRadStufe,proGetriebeStufe,proReifenStufe,
+    driftkit:el("driftkit").value,driftkitZuschlag,zuschlaege,verkaufswert,
+    motorText:selectText("motor"),bremseText:selectText("bremse"),radText:selectText("rad"),getriebeText:selectText("getriebe"),
+    proMotorText:selectText("proMotor"),proBremseText:selectText("proBremse"),proRadText:selectText("proRad"),proGetriebeText:selectText("proGetriebe"),proReifenText:selectText("proReifen")
+  };
+}
+
+ids.forEach(id=>{
+  const node=el(id);
+  node.addEventListener(id==="staatswert"?"input":"change",berechnen);
+});
+
+function holeFahrzeuge(){ return JSON.parse(localStorage.getItem("fahrzeuge")||"[]"); }
+function speichereFahrzeuge(a){ localStorage.setItem("fahrzeuge",JSON.stringify(a)); }
+
+function fahrzeugSpeichern(){
+  const name=el("fahrzeugname").value.trim();
+  const kz=el("kennzeichen").value.trim();
+  const wert=Number(el("staatswert").value);
+
+  if(!name || !kz || !wert || wert<=0){
+    alert("Bitte Fahrzeugname, Kennzeichen und einen gültigen Staatswert eingeben.");
+    return;
+  }
+
+  const daten={
+    id: bearbeitungsId ?? Date.now(),
+    fahrzeugname:name,
+    kennzeichen:kz,
+    garage:el("garage").value,
+    ...berechnen()
+  };
+
+  let a=holeFahrzeuge();
+  if(bearbeitungsId===null){
+    a.push(daten);
+  } else {
+    a=a.map(f=>f.id===bearbeitungsId ? daten : f);
+  }
+  speichereFahrzeuge(a);
+  formularLeeren();
+  listeAnzeigen();
+}
+
+function bearbeiten(id){
+  const f=holeFahrzeuge().find(x=>x.id===id);
+  if(!f) return;
+  bearbeitungsId=id;
+
+  el("fahrzeugname").value=f.fahrzeugname||"";
+  el("kennzeichen").value=f.kennzeichen||"";
+  el("garage").value=f.garage||"Famgarage";
+  el("staatswert").value=f.wert||0;
+
+  el("motor").value=String(f.motorStufe ?? f.motorProzent ?? 0);
+  el("bremse").value=String(f.bremseStufe ?? f.bremseProzent ?? 0);
+  el("rad").value=String(f.radStufe ?? f.radProzent ?? 0);
+  el("getriebe").value=String(f.getriebeStufe ?? f.getriebeProzent ?? 0);
+
+  function legacyStufe(kategorie,wert){
+    if(!wert) return "0";
+    const p=holeProPreise()[kategorie];
+    if(Number(wert)===Number(p.light)) return "light";
+    if(Number(wert)===Number(p.medium)) return "medium";
+    if(Number(wert)===Number(p.pro)) return "pro";
+    return "0";
+  }
+  el("proMotor").value=f.proMotorStufe ?? legacyStufe("motor",f.proMotor);
+  el("proBremse").value=f.proBremseStufe ?? legacyStufe("bremse",f.proBremse);
+  el("proRad").value=f.proRadStufe ?? legacyStufe("rad",f.proRad);
+  el("proGetriebe").value=f.proGetriebeStufe ?? legacyStufe("getriebe",f.proGetriebe);
+  el("proReifen").value=f.proReifenStufe ?? legacyStufe("reifen",f.proReifen);
+  el("driftkit").value=f.driftkit||"nein";
+
+  el("speichernBtn").textContent="Änderungen speichern";
+  el("abbrechenBtn").style.display="inline-block";
+  berechnen();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function bearbeitungAbbrechen(){
+  formularLeeren();
+}
+
+function formularLeeren(){
+  bearbeitungsId=null;
+  el("fahrzeugname").value="";
+  el("kennzeichen").value="";
+  el("staatswert").value="";
+  el("garage").value="Famgarage";
+  ["motor","bremse","rad","getriebe","proMotor","proBremse","proRad","proGetriebe","proReifen"].forEach(id=>el(id).value="0");
+  el("driftkit").value="nein";
+  el("speichernBtn").textContent="Fahrzeug zur Liste hinzufügen";
+  el("abbrechenBtn").style.display="none";
+  berechnen();
+}
+
+function alleFahrzeugeNeuBerechnen(){
+  const a=holeFahrzeuge();
+  const neu=a.map(f=>{
+    const wert=Number(f.wert)||0;
+    const motorProzent=Number(f.motorProzent)||0;
+    const bremseProzent=Number(f.bremseProzent)||0;
+    const radProzent=Number(f.radProzent)||0;
+    const getriebeProzent=Number(f.getriebeProzent)||0;
+    const tuningAbzug =
+      wert*motorProzent/100 +
+      wert*bremseProzent/100 +
+      wert*radProzent/100 +
+      wert*getriebeProzent/100;
+
+    const pm=preisFuer("motor",f.proMotorStufe||"0");
+    const pb=preisFuer("bremse",f.proBremseStufe||"0");
+    const pr=preisFuer("rad",f.proRadStufe||"0");
+    const pg=preisFuer("getriebe",f.proGetriebeStufe||"0");
+    const pre=preisFuer("reifen",f.proReifenStufe||"0");
+    const proTeileGesamt=pm+pb+pr+pg+pre;
+    const driftkitZuschlag=f.driftkit==="ja" ? wert*0.50 : 0;
+    const zuschlaege=proTeileGesamt+driftkitZuschlag;
+    const verkaufswert=wert+tuningAbzug+zuschlaege;
+
+    return {
+      ...f,
+      proMotor:pm,proBremse:pb,proRad:pr,proGetriebe:pg,proReifen:pre,
+      proTeileGesamt,driftkitZuschlag,zuschlaege,verkaufswert
+    };
+  });
+  speichereFahrzeuge(neu);
+}
+
+function fahrzeugLoeschen(id){
+  if(!confirm("Diesen Fahrzeugeintrag wirklich löschen?")) return;
+  speichereFahrzeuge(holeFahrzeuge().filter(f=>f.id!==id));
+  if(bearbeitungsId===id) formularLeeren();
+  listeAnzeigen();
+}
+
+function kurzeAuswahl(text){ return text && text!=="Keine" ? text : "Keine"; }
+
+function listeAnzeigen(){
+  const a=holeFahrzeuge();
+  el("fahrzeugListe").innerHTML="";
+  el("fahrzeugAnzahl").innerText=a.length;
+  const gesamtwert=a.reduce((sum,f)=>sum+Number(f.verkaufswert ?? f.endsumme ?? 0),0);
+  el("gesamtVerkaufswert").innerText=euro(gesamtwert);
+
+  const suchfeld=el("fahrzeugSuche");
+  const suche=(suchfeld ? suchfeld.value : "").trim().toLowerCase();
+
+  const gefiltert=a.filter(f=>{
+    if(!suche) return true;
+    const text=[
+      f.fahrzeugname,
+      f.kennzeichen,
+      f.garage,
+      f.motorText,
+      f.bremseText,
+      f.radText,
+      f.getriebeText,
+      f.proMotorText,
+      f.proBremseText,
+      f.proRadText,
+      f.proGetriebeText,
+      f.proReifenText,
+      f.driftkit
+    ].filter(Boolean).join(" ").toLowerCase();
+    return text.includes(suche);
+  });
+
+  gefiltert.forEach(f=>{
+    const r=document.createElement("tr");
+    const tuning=`Motor: ${esc(f.motorText||"Keine")}<br>Bremse: ${esc(f.bremseText||"Keine")}<br>Rad: ${esc(f.radText||"Keine")}<br>Getriebe: ${esc(f.getriebeText||"Keine")}`;
+    const pro=`Motor: ${esc(f.proMotorText||"Keine")}<br>Bremse: ${esc(f.proBremseText||"Keine")}<br>Rad: ${esc(f.proRadText||"Keine")}<br>Getriebe: ${esc(f.proGetriebeText||"Keine")}<br>Reifen: ${esc(f.proReifenText||"Keine")}`;
+    r.innerHTML=`
+      <td>${esc(f.fahrzeugname)}</td>
+      <td>${esc(f.kennzeichen)}</td>
+      <td>${esc(f.garage||"Famgarage")}</td>
+      <td class="money">${euro(f.wert)}</td>
+      <td>${tuning}</td>
+      <td>${pro}</td>
+      <td>${f.driftkit==="ja" ? "Ja ("+euro(f.driftkitZuschlag)+")" : "Nein"}</td>
+      <td class="money"><strong>${euro(f.verkaufswert ?? f.endsumme ?? 0)}</strong></td>
+      <td><div class="actions">
+        <button class="btn-edit" onclick="bearbeiten(${f.id})">Bearbeiten</button>
+        <button class="btn-delete" onclick="fahrzeugLoeschen(${f.id})">Löschen</button>
+      </div></td>`;
+    el("fahrzeugListe").appendChild(r);
+  });
+
+  if(gefiltert.length===0){
+    const r=document.createElement("tr");
+    r.innerHTML='<td colspan="9" style="text-align:center;color:#9ca3af;padding:24px">Kein Fahrzeug gefunden.</td>';
+    el("fahrzeugListe").appendChild(r);
+  }
+}
+
+function sicherungExportieren(){
+  const daten={
+    version:2,
+    erstelltAm:new Date().toISOString(),
+    proPreise:holeProPreise(),
+    fahrzeuge:holeFahrzeuge()
+  };
+  const blob=new Blob([JSON.stringify(daten,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  const d=new Date();
+  const datum=d.toISOString().slice(0,10);
+  a.href=url;
+  a.download=`Fahrzeugliste_Sicherung_${datum}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function sicherungImportieren(event){
+  const file=event.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const daten=JSON.parse(reader.result);
+      const fahrzeuge=Array.isArray(daten) ? daten : daten.fahrzeuge;
+      if(!Array.isArray(fahrzeuge)) throw new Error("Ungültige Sicherungsdatei");
+      if(!confirm(`Sicherung mit ${fahrzeuge.length} Fahrzeug(en) laden? Die aktuelle Liste wird ersetzt.`)) return;
+      if(daten && !Array.isArray(daten) && daten.proPreise){
+        localStorage.setItem("proPreise",JSON.stringify(daten.proPreise));
+        proPreiseFormularLaden();
+      }
+      speichereFahrzeuge(fahrzeuge);
+      alleFahrzeugeNeuBerechnen();
+      formularLeeren();
+      listeAnzeigen();
+      alert("Sicherung wurde erfolgreich geladen.");
+    }catch(e){
+      alert("Die Sicherungsdatei konnte nicht geladen werden.");
+    }finally{
+      event.target.value="";
+    }
+  };
+  reader.readAsText(file);
+}
+
+proPreiseFormularLaden();
+alleFahrzeugeNeuBerechnen();
+listeAnzeigen();
+berechnen();
+</script>
+</body>
+</html>
