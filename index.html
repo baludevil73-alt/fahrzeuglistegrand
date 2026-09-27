@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Fahrzeugliste â€“ Rechner & Verwaltung</title>
-<meta name="description" content="Fahrzeugwerte, Tuning, Pro-Teile, Driftkit und Verkaufswerte Ã¼bersichtlich berechnen und lokal verwalten.">
+<title>Fahrzeugliste &#8211; Rechner & Verwaltung</title>
+<meta name="description" content="Fahrzeugwerte, Tuning, Pro-Teile, Driftkit und Verkaufswerte &#252;bersichtlich berechnen und lokal verwalten.">
 <meta name="theme-color" content="#111827">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="index,follow">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>ðŸš—</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128663;</text></svg>">
 <style>
 *{box-sizing:border-box}
 body{margin:0;padding:30px;font-family:Arial,sans-serif;background:#111827;color:#f9fafb}
@@ -48,7 +48,7 @@ body{padding:15px}.table-container{overflow-x:auto}
 </style>
 
 <style id="compact-overrides">
-/* Kompaktere, Ã¼bersichtlichere Darstellung */
+/* Kompaktere, \fc bersichtlichere Darstellung */
 body{padding:16px;font-size:14px}
 .container{max-width:1280px}
 h1{font-size:25px;margin:0 0 2px}.subtitle{margin-bottom:14px;font-size:13px}
@@ -100,30 +100,30 @@ button{transition:transform .12s ease,filter .12s ease}button:hover{filter:brigh
 <div class="container">
 <header class="site-header">
   <div class="brand">
-    <div class="brand-icon" aria-hidden="true">ðŸš—</div>
+    <div class="brand-icon" aria-hidden="true">&#128663;</div>
     <div class="brand-copy">
       <h1>Fahrzeugliste</h1>
       <div class="subtitle">Rechner & lokale Fahrzeugverwaltung</div>
     </div>
   </div>
   <div class="header-badges" aria-label="Eigenschaften">
-    <span class="badge">âš¡ Sofortberechnung</span>
-    <span class="badge">ðŸ’¾ Lokale Speicherung</span>
-    <span class="badge">ðŸ“± Mobil nutzbar</span>
+    <span class="badge">&#9889; Sofortberechnung</span>
+    <span class="badge">&#128190; Lokale Speicherung</span>
+    <span class="badge">&#128241; Mobil nutzbar</span>
   </div>
 </header>
-<div class="public-note"><span>â„¹ï¸</span><span><strong>Datenschutzfreundlich:</strong> Fahrzeugdaten und PreisÃ¤nderungen bleiben in diesem Browser gespeichert. Es werden durch diese Seite keine Daten an einen Server Ã¼bertragen.</span></div>
+<div class="public-note"><span>&#8505;&#65039;</span><span><strong>Datenschutzfreundlich:</strong> Fahrzeugdaten und Preis&#228;nderungen bleiben in diesem Browser gespeichert. Es werden durch diese Seite keine Daten an einen Server &#252;bertragen.</span></div>
 
 
 <section class="card" id="zugang">
 <h2>Bearbeitungszugang</h2>
-<p id="zugangStatus" role="status">Nur ansehen â€“ die Liste ist gesperrt.</p>
+<p id="zugangStatus" role="status">Nur ansehen &#8211; die Liste ist gesperrt.</p>
 <form id="loginForm"><label for="loginPasswort">Passwort zum Bearbeiten</label>
 <input id="loginPasswort" type="password" autocomplete="current-password" required>
 <button class="btn-add" type="submit">Bearbeitung freischalten</button></form>
 <button id="sperrenBtn" class="btn-secondary" type="button" hidden>Wieder sperren</button>
 <div id="passwortVerwaltung" hidden>
-<h3 id="passwortTitel">PasswÃ¶rter verwalten</h3>
+<h3 id="passwortTitel">Passw&#246;rter verwalten</h3>
 <form id="passwortForm">
 <div class="grid">
 <div class="field"><label for="passwortName">Bezeichnung</label><input id="passwortName" required maxlength="60" placeholder="z. B. Marco"></div>
@@ -132,8 +132,8 @@ button{transition:transform .12s ease,filter .12s ease}button:hover{filter:brigh
 </div><button class="btn-add" type="submit">Passwort anlegen</button>
 </form><ul id="passwortListe"></ul></div>
 <p id="zugangMeldung" role="status" aria-live="polite"></p>
-<p class="notice">Lokale Bearbeitungssperre fÃ¼r diesen Browser. Beim ersten Einrichten legst du das erste Passwort fest. Freigeschaltete Personen kÃ¶nnen weitere PasswÃ¶rter anlegen und entfernen. Nach dem Neuladen ist die Seite wieder gesperrt. PasswÃ¶rter sind nicht in der Fahrzeugsicherung enthalten.</p>
-<p class="notice">Diese HTML-Datei bietet keinen serverseitigen Zugriffsschutz und keine gemeinsame Liste zwischen GerÃ¤ten. Personen mit Zugriff auf die Browserdaten kÃ¶nnen die Sperre umgehen.</p>
+<p class="notice">Lokale Bearbeitungssperre f&#252;r diesen Browser. Beim ersten Einrichten legst du das erste Passwort fest. Freigeschaltete Personen k&#246;nnen weitere Passw&#246;rter anlegen und entfernen. Nach dem Neuladen ist die Seite wieder gesperrt. Passw&#246;rter sind nicht in der Fahrzeugsicherung enthalten.</p>
+<p class="notice">Diese HTML-Datei bietet keinen serverseitigen Zugriffsschutz und keine gemeinsame Liste zwischen Ger&#228;ten. Personen mit Zugriff auf die Browserdaten k&#246;nnen die Sperre umgehen.</p>
 </section>
 <div class="card">
 <h2>Fahrzeugdaten</h2>
@@ -161,7 +161,7 @@ button{transition:transform .12s ease,filter .12s ease}button:hover{filter:brigh
 </div>
 
 <div class="card">
-<h2>Tuning-ZuschlÃ¤ge vom Staatswert</h2><div class="notice" style="margin-bottom:18px">HÃ¶here Tuning-Stufen werden kumulativ berechnet. Beispiel: Motor Stufe 4 = 10 % + 20 % + 30 % + 40 % = 100 % vom Staatswert.</div>
+<h2>Tuning-Zuschl&#228;ge vom Staatswert</h2><div class="notice" style="margin-bottom:18px">H&#246;here Tuning-Stufen werden kumulativ berechnet. Beispiel: Motor Stufe 4 = 10 % + 20 % + 30 % + 40 % = 100 % vom Staatswert.</div>
 
 <div class="tuning-row">
 <div class="category-name">Motor</div>
@@ -178,10 +178,10 @@ button{transition:transform .12s ease,filter .12s ease}button:hover{filter:brigh
 </div>
 
 <div class="tuning-row">
-<div class="category-name">RadaufhÃ¤ngung</div>
+<div class="category-name">Radaufh&#228;ngung</div>
 <div class="field"><label>Stufe</label><select id="rad"><option value="0">Keine</option><option value="1.5">Stufe 1 - 1,5 %</option><option value="3">Stufe 2 - 3 %</option><option value="4.5">Stufe 3 - 4,5 %</option><option value="6">Stufe 4 - 6 %</option></select></div>
 <div class="field"><label>Zuschlag vom Staatswert</label><input id="radAbzug" readonly></div>
-<div class="field"><label>Summe inkl. RadaufhÃ¤ngungs-Zuschlag</label><input id="radSumme" readonly></div>
+<div class="field"><label>Summe inkl. Radaufh&#228;ngungs-Zuschlag</label><input id="radSumme" readonly></div>
 </div>
 
 <div class="tuning-row">
@@ -195,7 +195,7 @@ button{transition:transform .12s ease,filter .12s ease}button:hover{filter:brigh
 <div class="card">
 <h2>Preise der Pro-Teile verwalten</h2>
 <div class="notice" style="margin-bottom:18px">
-Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die Ã„nderungen werden im Browser gespeichert und automatisch fÃ¼r alle Fahrzeuge neu berechnet.
+Hier kannst du die Preise f&#252;r Light, Medium und Pro jederzeit &#228;ndern. Die &#196;nderungen werden im Browser gespeichert und automatisch f&#252;r alle Fahrzeuge neu berechnet.
 </div>
 <div class="table-container">
 <table>
@@ -203,7 +203,7 @@ Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die 
 <tbody>
 <tr><td>Motor</td><td><input type="number" id="preisMotorLight" min="0" step="1000"></td><td><input type="number" id="preisMotorMedium" min="0" step="1000"></td><td><input type="number" id="preisMotorPro" min="0" step="1000"></td></tr>
 <tr><td>Bremse</td><td><input type="number" id="preisBremseLight" min="0" step="1000"></td><td><input type="number" id="preisBremseMedium" min="0" step="1000"></td><td><input type="number" id="preisBremsePro" min="0" step="1000"></td></tr>
-<tr><td>RadaufhÃ¤ngung</td><td><input type="number" id="preisRadLight" min="0" step="1000"></td><td><input type="number" id="preisRadMedium" min="0" step="1000"></td><td><input type="number" id="preisRadPro" min="0" step="1000"></td></tr>
+<tr><td>Radaufh&#228;ngung</td><td><input type="number" id="preisRadLight" min="0" step="1000"></td><td><input type="number" id="preisRadMedium" min="0" step="1000"></td><td><input type="number" id="preisRadPro" min="0" step="1000"></td></tr>
 <tr><td>Getriebe</td><td><input type="number" id="preisGetriebeLight" min="0" step="1000"></td><td><input type="number" id="preisGetriebeMedium" min="0" step="1000"></td><td><input type="number" id="preisGetriebePro" min="0" step="1000"></td></tr>
 <tr><td>Reifen</td><td><input type="number" id="preisReifenLight" min="0" step="1000"></td><td><input type="number" id="preisReifenMedium" min="0" step="1000"></td><td><input type="number" id="preisReifenPro" min="0" step="1000"></td></tr>
 </tbody>
@@ -214,7 +214,7 @@ Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die 
 </div>
 
 <div class="card">
-<h2>Pro-Teile â€“ werden zum Staatswert dazugerechnet</h2>
+<h2>Pro-Teile &#8211; werden zum Staatswert dazugerechnet</h2>
 
 <div class="tuning-row">
 <div class="category-name">Motor Pro-Teil</div>
@@ -231,7 +231,7 @@ Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die 
 </div>
 
 <div class="tuning-row">
-<div class="category-name">RadaufhÃ¤ngung Pro-Teil</div>
+<div class="category-name">Radaufh&#228;ngung Pro-Teil</div>
 <div class="field"><label>Auswahl</label><select id="proRad"><option value="0">Keine</option><option value="light">Light</option><option value="medium">Medium</option><option value="pro">Pro</option></select></div>
 <div class="field"><label>Zuschlag</label><input id="proRadWert" readonly></div>
 <div></div>
@@ -260,14 +260,14 @@ Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die 
 
 <div class="result-box">
 <div class="result-grid">
-<div><label>10 % vom Staatswert (nur Anzeige)</label><div id="grundAbzugAnzeige" class="final">0,00 â‚¬</div></div>
-<div><label>Tuning-ZuschlÃ¤ge gesamt</label><div id="gesamtAbzug" class="final">0,00 â‚¬</div></div>
-<div><label>ZuschlÃ¤ge gesamt</label><div id="zuschlaegeGesamt" class="final">0,00 â‚¬</div></div>
-<div><label>Verkaufswert / Endsumme</label><div id="endsumme" class="final">0,00 â‚¬</div></div>
+<div><label>10 % vom Staatswert (nur Anzeige)</label><div id="grundAbzugAnzeige" class="final">0,00 &#8364;</div></div>
+<div><label>Tuning-Zuschl&#228;ge gesamt</label><div id="gesamtAbzug" class="final">0,00 &#8364;</div></div>
+<div><label>Zuschl&#228;ge gesamt</label><div id="zuschlaegeGesamt" class="final">0,00 &#8364;</div></div>
+<div><label>Verkaufswert / Endsumme</label><div id="endsumme" class="final">0,00 &#8364;</div></div>
 </div>
 </div>
 
-<button class="btn-add" id="speichernBtn" onclick="fahrzeugSpeichern()">Fahrzeug zur Liste hinzufÃ¼gen</button>
+<button class="btn-add" id="speichernBtn" onclick="fahrzeugSpeichern()">Fahrzeug zur Liste hinzuf&#252;gen</button>
 <button class="btn-secondary" id="abbrechenBtn" onclick="bearbeitungAbbrechen()" style="display:none">Bearbeiten abbrechen</button>
 </div>
 
@@ -282,7 +282,7 @@ Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die 
 </div>
 <div>
 <label>Gesamter Verkaufswert aller Fahrzeuge</label>
-<div id="gesamtVerkaufswert" class="final">0,00 â‚¬</div>
+<div id="gesamtVerkaufswert" class="final">0,00 &#8364;</div>
 </div>
 </div>
 </div>
@@ -292,11 +292,11 @@ Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die 
 </div>
 
 <div style="margin-bottom:15px">
-<button class="btn-export" onclick="sicherungExportieren()">ðŸ’¾ Sicherung auf Festplatte speichern</button>
-<button class="btn-import" onclick="document.getElementById('importDatei').click()">ðŸ“‚ Sicherung laden</button>
+<button class="btn-export" onclick="sicherungExportieren()">&#128190; Sicherung auf Festplatte speichern</button>
+<button class="btn-import" onclick="document.getElementById('importDatei').click()">&#128194; Sicherung laden</button>
 <input id="importDatei" type="file" accept=".json,application/json" style="display:none" onchange="sicherungImportieren(event)">
 </div>
-<div class="notice">Die Fahrzeugliste wird automatisch im Browser gespeichert. Mit â€žSicherung auf Festplatte speichernâ€œ kannst du zusÃ¤tzlich eine JSON-Sicherungsdatei herunterladen und spÃ¤ter wieder laden.</div>
+<div class="notice">Die Fahrzeugliste wird automatisch im Browser gespeichert. Mit &#8222;Sicherung auf Festplatte speichern&#8220; kannst du zus&#228;tzlich eine JSON-Sicherungsdatei herunterladen und sp&#228;ter wieder laden.</div>
 <div class="table-container">
 <table>
 <thead>
@@ -309,7 +309,7 @@ Hier kannst du die Preise fÃ¼r Light, Medium und Pro jederzeit Ã¤ndern. Die 
 </table>
 </div>
 </div>
-<footer class="site-footer">Fahrzeugliste Â· Lokale Web-App ohne Server-Datenbank</footer>
+<footer class="site-footer">Fahrzeugliste &#183; Lokale Web-App ohne Server-Datenbank</footer>
 </div>
 
 <script>
@@ -321,7 +321,7 @@ function zugaenge(){
   const raw=localStorage.getItem(ZUGANG_KEY);
   if(raw===null) return [];
   const entries=JSON.parse(raw);
-  if(!Array.isArray(entries)||!entries.length||entries.some(x=>!x.id||!x.name||!x.salt||!x.hash)) throw new Error('Die gespeicherten Zugangsdaten sind beschÃ¤digt.');
+  if(!Array.isArray(entries)||!entries.length||entries.some(x=>!x.id||!x.name||!x.salt||!x.hash)) throw new Error('Die gespeicherten Zugangsdaten sind besch\u00e4digt.');
   return entries;
 }
 function darfBearbeiten(){
@@ -333,7 +333,7 @@ function bearbeitungErlaubt(){
   return false;
 }
 async function passwortHash(passwort,salt){
-  if(!globalThis.crypto?.subtle) throw new Error('Passwortschutz benÃ¶tigt einen aktuellen Browser und HTTPS, localhost oder eine lokale Datei.');
+  if(!globalThis.crypto?.subtle) throw new Error('Passwortschutz ben\u00f6tigt einen aktuellen Browser und HTTPS, localhost oder eine lokale Datei.');
   const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(passwort),'PBKDF2',false,['deriveBits']);
   const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:Uint8Array.from(salt.match(/../g),h=>parseInt(h,16)),iterations:600000,hash:'SHA-256'},key,256);
   return Array.from(new Uint8Array(bits),b=>b.toString(16).padStart(2,'0')).join('');
@@ -342,11 +342,11 @@ function zugangAnzeigen(){
   let entries=[],fehler='';
   try{entries=zugaenge();}catch(e){fehler=e.message;}
   const offen=darfBearbeiten(),einrichten=!fehler&&!entries.length;
-  el('zugangStatus').textContent=offen?'Bearbeitung freigeschaltet.':einrichten?'Nur ansehen â€“ bitte zuerst das erste Passwort einrichten.':'Nur ansehen â€“ die Liste ist gesperrt.';
+  el('zugangStatus').textContent=offen?'Bearbeitung freigeschaltet.':einrichten?'Nur ansehen \u2013 bitte zuerst das erste Passwort einrichten.':'Nur ansehen \u2013 die Liste ist gesperrt.';
   el('loginForm').hidden=offen||einrichten||!!fehler;
   el('sperrenBtn').hidden=!offen;
   el('passwortVerwaltung').hidden=!(offen||einrichten);
-  el('passwortTitel').textContent=einrichten?'Erstes Passwort einrichten':'PasswÃ¶rter verwalten';
+  el('passwortTitel').textContent=einrichten?'Erstes Passwort einrichten':'Passw\u00f6rter verwalten';
   if(fehler) el('zugangMeldung').textContent=fehler;
   document.querySelectorAll('.card:not(#zugang) input,.card:not(#zugang) select,.card:not(#zugang) button').forEach(node=>{
     if(node.id==='fahrzeugSuche'||node.classList.contains('btn-export')) return;
@@ -360,7 +360,7 @@ function zugangAnzeigen(){
     button.addEventListener('click',()=>{
       if(!bearbeitungErlaubt())return;
       const aktuell=zugaenge();
-      if(aktuell.length<2||!confirm('Passwort â€ž'+entry.name+'â€œ entfernen?'))return;
+      if(aktuell.length<2||!confirm('Passwort \u201e'+entry.name+'\u201c entfernen?'))return;
       try{localStorage.setItem(ZUGANG_KEY,JSON.stringify(aktuell.filter(x=>x.id!==entry.id)));if(freigabe===entry.id)zugangSperren();else zugangAnzeigen();}catch{el('zugangMeldung').textContent='Passwort konnte nicht entfernt werden.';}
     });li.append(button);el('passwortListe').append(li);
   });
@@ -371,14 +371,14 @@ function zugangSperren(){
 }
 async function zugangFormular(event,aktion){
   event.preventDefault();const button=event.target.querySelector('button[type="submit"]');button.disabled=true;
-  el('zugangMeldung').textContent='Bitte warten â€¦';
+  el('zugangMeldung').textContent='Bitte warten \u2026';
   try{await aktion();}catch(e){el('zugangMeldung').textContent=e.message;}finally{button.disabled=false;}
 }
 el('loginForm').addEventListener('submit',event=>zugangFormular(event,async()=>{
   const snapshot=localStorage.getItem(ZUGANG_KEY),passwort=el('loginPasswort').value;
   for(const entry of zugaenge()){
     if(await passwortHash(passwort,entry.salt)===entry.hash){
-      if(snapshot!==localStorage.getItem(ZUGANG_KEY))throw new Error('ZugÃ¤nge wurden geÃ¤ndert. Bitte erneut anmelden.');
+      if(snapshot!==localStorage.getItem(ZUGANG_KEY))throw new Error('Zug\u00e4nge wurden ge\u00e4ndert. Bitte erneut anmelden.');
       freigabe=entry.id;el('loginForm').reset();el('zugangMeldung').textContent='';listeAnzeigen();zugangAnzeigen();return;
     }
   }
@@ -389,11 +389,11 @@ el('passwortForm').addEventListener('submit',event=>zugangFormular(event,async()
   if(entries.length&&!bearbeitungErlaubt())return;
   const name=el('passwortName').value.trim(),passwort=el('neuesPasswort').value;
   if(!name||passwort.length<10)throw new Error('Bitte Bezeichnung und mindestens 10 Zeichen eingeben.');
-  if(passwort!==el('passwortWiederholen').value)throw new Error('Die PasswÃ¶rter stimmen nicht Ã¼berein.');
+  if(passwort!==el('passwortWiederholen').value)throw new Error('Die Passw\u00f6rter stimmen nicht \u00fcberein.');
   if(entries.some(x=>x.name.toLowerCase()===name.toLowerCase()))throw new Error('Diese Bezeichnung ist bereits vergeben.');
   const salt=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');
   const hash=await passwortHash(passwort,salt);
-  if(snapshot!==localStorage.getItem(ZUGANG_KEY)||(entries.length&&!darfBearbeiten()))throw new Error('Zugang hat sich geÃ¤ndert. Bitte erneut versuchen.');
+  if(snapshot!==localStorage.getItem(ZUGANG_KEY)||(entries.length&&!darfBearbeiten()))throw new Error('Zugang hat sich ge\u00e4ndert. Bitte erneut versuchen.');
   const entry={id:crypto.randomUUID(),name,salt,hash};
   localStorage.setItem(ZUGANG_KEY,JSON.stringify([...entries,entry]));
   el('passwortForm').reset();el('zugangMeldung').textContent='Passwort angelegt. Zum Bearbeiten bitte freischalten.';zugangAnzeigen();
@@ -525,7 +525,7 @@ function berechnen(){
   const getriebeStufe=+el("getriebe").value;
 
   // Kumulative Tuning-Prozente:
-  // Bei einer hÃ¶heren Stufe werden alle vorherigen Stufen mitgerechnet.
+  // Bei einer h\u00f6heren Stufe werden alle vorherigen Stufen mitgerechnet.
   const motorMap={0:0,10:10,20:30,30:60,40:100};
   const bremseMap={0:0,2.5:2.5,5:7.5,7.5:15};
   const radMap={0:0,1.5:1.5,3:4.5,4.5:9,6:15};
@@ -615,7 +615,7 @@ function fahrzeugSpeichern(){
   const wert=Number(el("staatswert").value);
 
   if(!name || !kz || !wert || wert<=0){
-    alert("Bitte Fahrzeugname, Kennzeichen und einen gÃ¼ltigen Staatswert eingeben.");
+    alert("Bitte Fahrzeugname, Kennzeichen und einen g\u00fcltigen Staatswert eingeben.");
     return;
   }
 
@@ -669,7 +669,7 @@ function bearbeiten(id){
   el("proReifen").value=f.proReifenStufe ?? legacyStufe("reifen",f.proReifen);
   el("driftkit").value=f.driftkit||"nein";
 
-  el("speichernBtn").textContent="Ã„nderungen speichern";
+  el("speichernBtn").textContent="\u00c4nderungen speichern";
   el("abbrechenBtn").style.display="inline-block";
   berechnen();
   window.scrollTo({top:0,behavior:"smooth"});
@@ -687,7 +687,7 @@ function formularLeeren(){
   el("garage").value="Famgarage";
   ["motor","bremse","rad","getriebe","proMotor","proBremse","proRad","proGetriebe","proReifen"].forEach(id=>el(id).value="0");
   el("driftkit").value="nein";
-  el("speichernBtn").textContent="Fahrzeug zur Liste hinzufÃ¼gen";
+  el("speichernBtn").textContent="Fahrzeug zur Liste hinzuf\u00fcgen";
   el("abbrechenBtn").style.display="none";
   berechnen();
 }
@@ -728,7 +728,7 @@ function alleFahrzeugeNeuBerechnen(){
 
 function fahrzeugLoeschen(id){
   if(!bearbeitungErlaubt()) return;
-  if(!confirm("Diesen Fahrzeugeintrag wirklich lÃ¶schen?")) return;
+  if(!confirm("Diesen Fahrzeugeintrag wirklich l\u00f6schen?")) return;
   speichereFahrzeuge(holeFahrzeuge().filter(f=>f.id!==id));
   if(bearbeitungsId===id) formularLeeren();
   listeAnzeigen();
@@ -781,7 +781,7 @@ function listeAnzeigen(){
       <td class="money"><strong>${euro(f.verkaufswert ?? f.endsumme ?? 0)}</strong></td>
       <td><div class="actions">
         <button class="btn-edit" ${darfBearbeiten()?"":"disabled"}>Bearbeiten</button>
-        <button class="btn-delete" ${darfBearbeiten()?"":"disabled"}>LÃ¶schen</button>
+        <button class="btn-delete" ${darfBearbeiten()?"":"disabled"}>L\u00f6schen</button>
       </div></td>`;
     r.querySelector(".btn-edit").addEventListener("click",()=>bearbeiten(f.id));
     r.querySelector(".btn-delete").addEventListener("click",()=>fahrzeugLoeschen(f.id));
@@ -825,7 +825,7 @@ function sicherungImportieren(event){
     try{
       const daten=JSON.parse(reader.result);
       const fahrzeuge=Array.isArray(daten) ? daten : daten.fahrzeuge;
-      if(!Array.isArray(fahrzeuge)) throw new Error("UngÃ¼ltige Sicherungsdatei");
+      if(!Array.isArray(fahrzeuge)) throw new Error("Ung\u00fcltige Sicherungsdatei");
       if(!confirm(`Sicherung mit ${fahrzeuge.length} Fahrzeug(en) laden? Die aktuelle Liste wird ersetzt.`)) return;
       if(daten && !Array.isArray(daten) && daten.proPreise){
         localStorage.setItem("proPreise",JSON.stringify(daten.proPreise));
